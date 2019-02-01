@@ -1,21 +1,39 @@
 import React, { Component } from 'react';
+import Module from './components/Module';
+import { maxim } from './helpers';
 
 class App extends Component {
-//   componentDidMount () {
-//     const script = document.createElement("script");
+  state = {
+    audio: new maxim.maxiAudio(),
+    osc: new maxim.maxiOsc(),
+    count: 0
+  }
 
-//     script.src = "./maxim.js";
-//     script.async = true;
+  componentDidMount() {
+    const { audio, osc, output, play } = this.state;
+    
 
-//     document.body.appendChild(script);
-// }
+    console.log(audio)
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    const { osc } = this.state;
+    const freq = Math.floor(Math.random() * 200) + 200;
+    window.audio.play = function() {
+      this.output = osc.sinewave(freq)
+    }
+    console.log('update')
+  }
+
   render() {
     return (
       <div>
-        App
+        <Module />
+        <button onClick={() => this.setState({count: this.state.count + 1})}>Click</button>
       </div>
     );
   }
+
 }
 
 export default App;
