@@ -1,39 +1,76 @@
 import React, { Component } from 'react';
+import injectSheet from 'react-jss';
 import Module from './components/Module';
-import { maxim } from './helpers';
 
 class App extends Component {
   state = {
-    audio: new maxim.maxiAudio(),
-    osc: new maxim.maxiOsc(),
-    count: 0
-  }
-
-  componentDidMount() {
-    const { audio, osc, output, play } = this.state;
-    
-
-    console.log(audio)
+    modules: [],
+    waves: []
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const { osc } = this.state;
+    const { waves } = this.state;
+    const n = waves.length;
     const freq = Math.floor(Math.random() * 200) + 200;
     window.audio.play = function() {
-      this.output = osc.sinewave(freq)
+      let sum = 0;
+      if (n > 0) {
+        for (let i = 0; i < n; i++) {
+          sum += waves[i](freq + i * 4);
+        }
+        this.output = sum / n * 2;
+      } else {
+        this.output = 0;
+      }
     }
     console.log('update')
   }
 
   render() {
+    const { classes } = this.props;
+
     return (
-      <div>
-        <Module />
-        <button onClick={() => this.setState({count: this.state.count + 1})}>Click</button>
+      <div className={classes.app}>
+        {
+          this.state.modules.map((m, i) => <Module key={i} onOscSet={this.handleOscSet} />)
+        }
+        <div className={classes.addButton} onClick={this.addModule}>Add module</div>
       </div>
     );
   }
 
+  addModule = () => {
+    this.setState({
+      modules: [...this.state.modules, {}]
+    })
+  }
+
+  handleOscSet = (wave) => {
+    this.setState({
+      waves: [...this.state.waves, wave]
+    }, () => console.log(this.state.waves))
+  }
+
 }
 
-export default App;
+const style = {
+  app: {
+    display: 'flex',
+    flexDirection: 'column'
+  },
+  addButton: {
+    cursor: 'pointer',
+    color: '#eeeeee',
+    textAlign: 'center',
+    borderRadius: '0.5rem',
+    marginTop: '2rem',
+    border: '1px solid #393e46',
+    padding: '1rem 2rem',
+    boxShadow: '0 1px 5px rgba(0, 0, 0, 0.46)',
+    '&:hover': {
+      boxShadow: '0 1px 3px rgba(78, 204, 163, 0.46)'
+    }
+  }
+}
+
+export default injectSheet(style)(App);
