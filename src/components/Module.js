@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import injectSheet from 'react-jss';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
 import { maxim } from '../helpers';
 
 class Module extends Component {
@@ -21,20 +23,24 @@ class Module extends Component {
         const { waveName } = this.state;
         return (
             <div className={classes.module}>
-                {waveName}
-                <select value={waveName}
-                    className={classes.waveSelect}
-                    onChange={this.handleOscWaveSelect}>
-                    <option value="sinewave">Sine</option>
-                    <option value="sawn">Saw</option>
-                    <option value="square">Square</option>
-                </select>
+                <Tabs
+                    classes={{ root: classes.waveSelect, indicator: classes.waveSelectIndicator }}
+                    value={waveName}
+                    onChange={this.handleOscWaveSelect}
+                    variant="fullWidth"
+                >
+                    <Tab classes={{ root: classes.waveSelect}} label="Sine" value="sinewave" />
+                    <Tab classes={{ root: classes.waveSelect}} label="Triangle" value="triangle" />
+                    <Tab classes={{ root: classes.waveSelect}} label="Saw" value="sawn" />
+                    <Tab classes={{ root: classes.waveSelect}} label="Square" value="square" />
+                </Tabs>
+
             </div>
         );
     }
 
-    handleOscWaveSelect = (e) => {
-        const waveName = e.target.value;
+    handleOscWaveSelect = (event, value) => {
+        const waveName = value;
         const wave = this.state.osc[waveName];
         this.setState({
             wave,
@@ -52,6 +58,13 @@ const style = {
         padding: '1rem',
         boxShadow: '0 1px 5px rgba(0, 0, 0, 0.46)',
         margin: '0.5rem 0'
+    },
+    waveSelect: {
+        fontFamily: 'Montserrat',
+        color: '#eeeeee',
+    },
+    waveSelectIndicator: {
+        backgroundColor: '#4ecca3'
     }
 }
 
