@@ -32,7 +32,12 @@ class App extends Component {
     return (
       <div className={classes.app}>
         {
-          this.state.modules.map((m, i) => <Module key={i} onOscSet={this.handleOscSet} />)
+          this.state.modules.map((m, i) => <Module 
+          key={i} 
+          index={i} 
+          onOscSet={this.handleOscSet}
+          onOscWaveSelect={this.handleOscWaveSelect}
+           />)
         }
         <div className={classes.addButton} onClick={this.addModule}>Add module</div>
       </div>
@@ -48,6 +53,14 @@ class App extends Component {
   handleOscSet = (wave) => {
     this.setState({
       waves: [...this.state.waves, wave]
+    }, () => console.log(this.state.waves))
+  }
+
+  handleOscWaveSelect = (wave, index) => {
+    const waves = [...this.state.waves];
+    waves[index] = wave;
+    this.setState({
+      waves
     }, () => console.log(this.state.waves))
   }
 
@@ -67,6 +80,7 @@ const style = {
     border: '1px solid #393e46',
     padding: '1rem 2rem',
     boxShadow: '0 1px 5px rgba(0, 0, 0, 0.46)',
+    userSelect: 'none',
     '&:hover': {
       boxShadow: '0 1px 3px rgba(78, 204, 163, 0.46)'
     }
