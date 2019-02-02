@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import injectSheet from 'react-jss';
 import Module from './components/Module';
+import Analyzer from './components/Analyzer';
 
 class App extends Component {
   state = {
@@ -14,8 +15,11 @@ class App extends Component {
       const n = modulesNumber;
       let module, wave, freq, mix, lfo, lfoFreq;
       let sum = 0;
+      let counter = 0;
       window.audio.play = function () {
+        counter++;
         sum = 0;
+
         if (n > 0) {
           for (let i = 0; i < n; i++) {
             module = modules[i];
@@ -25,14 +29,16 @@ class App extends Component {
             lfoFreq = module.lfoFreq;
             mix = module.mix;
 
-            sum +=  (wave(freq) * lfo(lfoFreq)) * mix;
-            // sum +=  wave(freq) * mix;
+            sum += (wave(freq) * lfo(lfoFreq)) * mix;
           }
           this.output = sum / n * 2;
+          window.drawOutput[counter % 1024] = sum / n * 2;
         } else {
           this.output = 0;
+          window.drawOutput[counter % 1024] = this.output;
+
         }
-        // this.output = 0;
+
       }
       // console.log('update')
     }
@@ -44,19 +50,22 @@ class App extends Component {
 
     return (
       <div className={classes.app}>
-        {
-          Array.apply(null, Array(modulesNumber)).map((m, i) => <Module
-            key={i}
-            index={i}
-            onOscSet={this.handleOscSet}
-            onWaveChange={this.handleWaveChange}
-            onFreqChange={this.handleFreqChange}
-            onLFOFreqChange={this.handleLFOFreqChange}
-            onLFOWaveChange={this.handleLFOWaveChange}
-            onMixChange={this.handleMixChange}
-          />)
-        }
-        <div className={classes.addButton} onClick={this.addModule}>Add module</div>
+        <Analyzer />
+        <div className={classes.container}>
+          {
+            Array.apply(null, Array(modulesNumber)).map((m, i) => <Module
+              key={i}
+              index={i}
+              onOscSet={this.handleOscSet}
+              onWaveChange={this.handleWaveChange}
+              onFreqChange={this.handleFreqChange}
+              onLFOFreqChange={this.handleLFOFreqChange}
+              onLFOWaveChange={this.handleLFOWaveChange}
+              onMixChange={this.handleMixChange}
+            />)
+          }
+          <div className={classes.addButton} onClick={this.addModule}>Add module</div>
+        </div>
       </div>
     );
   }
@@ -126,6 +135,11 @@ class App extends Component {
 
 const style = {
   app: {
+    
+  },
+  container: {
+    margin: '0 auto',
+    maxWidth: '900px',
     display: 'flex',
     flexDirection: 'column'
   },

@@ -64,7 +64,7 @@ class Module extends Component {
                 <Knob
                     initial={this.initialLFOFreq}
                     min={0}
-                    max={600}
+                    max={300}
                     step={1}
                     label="LFO Frequency"
                     color="#4ecca3"

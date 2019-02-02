@@ -1,9 +1,9 @@
 @import url('https://fonts.googleapis.com/css?family=Montserrat');
 
 body {
-  margin: 0 auto;
+  margin: 0;
   padding: 0;
-  max-width: 900px;
+  height: 102vh;
   background-color: #232931;
   font-family: 'Montserrat', sans-serif;
   -webkit-font-smoothing: antialiased;

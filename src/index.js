@@ -4,6 +4,8 @@ import './index.css';
 import App from './App';
 import { maxim } from './helpers';
 
+window.drawOutput = [];
+
 const audio = new maxim.maxiAudio();
 window.audio = audio;
 audio.init();
