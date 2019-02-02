@@ -1,8 +1,10 @@
 {
   "name": "maxim-synth",
   "version": "0.1.0",
+  "homepage": "https://omhet.github.io/maxisynth",
   "private": true,
   "dependencies": {
+    "gh-pages": "^2.0.1",
     "precision-inputs": "^0.2.5",
     "react": "^16.7.0",
     "react-dom": "^16.7.0",
@@ -13,7 +15,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": "react-app"
