@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import injectSheet from 'react-jss';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
+import Knob from './Knob';
 import { maxim } from '../helpers';
 
 class Module extends Component {
@@ -23,6 +22,7 @@ class Module extends Component {
         const { waveName } = this.state;
         return (
             <div className={classes.module}>
+                <Knob className={classes.freq} />
 
             </div>
         );
@@ -47,6 +47,10 @@ const style = {
         padding: '1rem',
         boxShadow: '0 1px 5px rgba(0, 0, 0, 0.46)',
         margin: '0.5rem 0'
+    },
+    freq: {
+        // width: '2rem',
+        // height: '2rem'
     }
 }
 
