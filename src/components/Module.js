@@ -27,7 +27,7 @@ class Module extends Component {
                 <Knob 
                 initial={this.initialFreq}
                 min={0}
-                max={1000}
+                max={600}
                 step={1}
                 label="Frequency"
                 color="#4ecca3"
@@ -45,7 +45,7 @@ class Module extends Component {
     }
 
     handleFreqChange = (value) => {
-        console.log(value)
+        this.props.onFreqChange(value, this.props.index)
     }
 
     handleOscWaveSelect = (event, value) => {

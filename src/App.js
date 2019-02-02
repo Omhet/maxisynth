@@ -32,7 +32,7 @@ class App extends Component {
         // this.output = 0;
 
     }
-    console.log('update')
+    // console.log('update')
   }
   }
 
@@ -48,15 +48,9 @@ class App extends Component {
           index={i} 
           onOscSet={this.handleOscSet}
           onOscWaveSelect={this.handleOscWaveSelect}
+          onFreqChange={this.handleFreqChange}
            />)
         }
-          {/* this.state.modules.map((m, i) => <Module 
-          key={i} 
-          index={i} 
-          onOscSet={this.handleOscSet}
-          onOscWaveSelect={this.handleOscWaveSelect}
-           />) */}
-        
         <div className={classes.addButton} onClick={this.addModule}>Add module</div>
       </div>
     );
@@ -86,6 +80,13 @@ class App extends Component {
     }, () => console.log(this.state.waves))
   }
 
+  handleFreqChange = (freq, index) => {
+    const modules = [...this.state.modules];
+    modules[index].freq = Number(freq);
+    this.setState({
+      modules
+    })
+  }
 }
 
 const style = {

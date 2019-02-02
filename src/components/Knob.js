@@ -16,7 +16,8 @@ class Knob extends Component {
             max,
             step,
             color,
-            initial
+            initial,
+            dragResistance: 200
         });
         knob.addEventListener('change', function (e) {
             handleChange(e.target.value);
