@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import injectSheet from 'react-jss';
 import { FLStandardKnob } from 'precision-inputs/common/precision-inputs.fl-controls';
 import 'precision-inputs/css/precision-inputs.fl-controls.css';
 
@@ -8,17 +9,43 @@ class Knob extends Component {
     knob = null;
 
     componentDidMount() {
-        this.knob = new FLStandardKnob(this.knobContainer.current);
-        this.knob.addEventListener('change', function (e) {
-            console.log(e.target.value);
+        let { knob } = this;
+        const { knobContainer, handleChange, props: { min, max, step, color, initial } } = this;
+        knob = new FLStandardKnob(knobContainer.current, {
+            min,
+            max,
+            step,
+            color,
+            initial
+        });
+        knob.addEventListener('change', function (e) {
+            handleChange(e.target.value);
         });
     }
 
     render() {
+        const { label, classes } = this.props;
+
         return (
-            <div ref={this.knobContainer}></div>
+            <div className={classes.wrapper}>
+                <div ref={this.knobContainer}></div>
+                <div>{ label }</div>
+            </div>
         );
+    }
+
+    handleChange = (val) => {
+        this.props.onChange(val);
     }
 }
 
-export default Knob;
+const style = {
+    wrapper: {
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center'
+    }
+}
+
+export default injectSheet(style)(Knob) ;
