@@ -9,12 +9,14 @@ class Module extends Component {
         wave: null,
         waveName: 'sinewave'
     }
+    initialFreq = 100
+    initialMix = 0.2
 
     componentDidMount() {
         const wave = this.state.osc.sinewave;
         this.setState({
             wave
-        }, this.props.onOscSet(wave.bind(this.state.osc)))
+        }, this.props.onOscSet(wave.bind(this.state.osc), this.initialFreq, this.initialMix))
     }
 
     render() {
@@ -23,7 +25,7 @@ class Module extends Component {
         return (
             <div className={classes.module}>
                 <Knob 
-                initial={200}
+                initial={this.initialFreq}
                 min={0}
                 max={1000}
                 step={1}
@@ -31,6 +33,7 @@ class Module extends Component {
                 color="#4ecca3"
                 onChange={this.handleFreqChange} />
                 <Knob 
+                initial={this.initialMix}
                 min={0}
                 max={1}
                 step={0.01}

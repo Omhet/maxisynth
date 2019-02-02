@@ -5,55 +5,77 @@ import Module from './components/Module';
 class App extends Component {
   state = {
     modules: [],
-    waves: []
+    modulesNumber: 0
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const { waves } = this.state;
-    const n = waves.length;
-    const freq = Math.floor(Math.random() * 200) + 200;
+    const { modules, modulesNumber } = this.state;
+    if (modules !== prevState.modules) {
+    const n = modulesNumber;
+    let module, wave, freq, mix;
+    // console.log(modules)
+    let sum = 0;
     window.audio.play = function() {
-      let sum = 0;
       if (n > 0) {
         for (let i = 0; i < n; i++) {
-          sum += waves[i](freq + i * 4);
+          module = modules[i];
+          wave = module.wave;
+          freq = module.freq;
+          mix = module.mix;
+
+          sum += wave(freq) * mix;
         }
         this.output = sum / n * 2;
       } else {
         this.output = 0;
       }
+        // this.output = 0;
+
     }
     console.log('update')
+  }
   }
 
   render() {
     const { classes } = this.props;
+    const { modulesNumber } = this.state;
 
     return (
       <div className={classes.app}>
         {
-          this.state.modules.map((m, i) => <Module 
+          Array.apply(null, Array(modulesNumber)).map((m, i) => <Module 
           key={i} 
           index={i} 
           onOscSet={this.handleOscSet}
           onOscWaveSelect={this.handleOscWaveSelect}
            />)
         }
+          {/* this.state.modules.map((m, i) => <Module 
+          key={i} 
+          index={i} 
+          onOscSet={this.handleOscSet}
+          onOscWaveSelect={this.handleOscWaveSelect}
+           />) */}
+        
         <div className={classes.addButton} onClick={this.addModule}>Add module</div>
       </div>
     );
   }
 
   addModule = () => {
+    console.log('addModule')
     this.setState({
-      modules: [...this.state.modules, {}]
+      modulesNumber: this.state.modulesNumber + 1
     })
   }
 
-  handleOscSet = (wave) => {
+  handleOscSet = (wave, freq, mix) => {
+    console.log('oscSet')
+    const modules = [...this.state.modules];
+    modules.push({ wave, freq, mix})
     this.setState({
-      waves: [...this.state.waves, wave]
-    }, () => console.log(this.state.waves))
+      modules
+    })
   }
 
   handleOscWaveSelect = (wave, index) => {
