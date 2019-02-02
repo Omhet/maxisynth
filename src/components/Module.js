@@ -23,17 +23,6 @@ class Module extends Component {
         const { waveName } = this.state;
         return (
             <div className={classes.module}>
-                <Tabs
-                    classes={{ root: classes.waveSelect, indicator: classes.waveSelectIndicator }}
-                    value={waveName}
-                    onChange={this.handleOscWaveSelect}
-                    variant="fullWidth"
-                >
-                    <Tab classes={{ root: classes.waveSelect}} label="Sine" value="sinewave" />
-                    <Tab classes={{ root: classes.waveSelect}} label="Triangle" value="triangle" />
-                    <Tab classes={{ root: classes.waveSelect}} label="Saw" value="sawn" />
-                    <Tab classes={{ root: classes.waveSelect}} label="Square" value="square" />
-                </Tabs>
 
             </div>
         );
@@ -58,13 +47,6 @@ const style = {
         padding: '1rem',
         boxShadow: '0 1px 5px rgba(0, 0, 0, 0.46)',
         margin: '0.5rem 0'
-    },
-    waveSelect: {
-        fontFamily: 'Montserrat',
-        color: '#eeeeee',
-    },
-    waveSelectIndicator: {
-        backgroundColor: '#4ecca3'
     }
 }
 
