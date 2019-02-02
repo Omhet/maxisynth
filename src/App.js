@@ -2,11 +2,12 @@ import React, { Component } from 'react';
 import injectSheet from 'react-jss';
 import Module from './components/Module';
 import Visualizer from './components/Visualizer';
+import { maxim } from './helpers';
 
 class App extends Component {
   state = {
     modules: [],
-    modulesNumber: 1
+    modulesNumber: 0
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -16,31 +17,29 @@ class App extends Component {
       let module, wave, freq, mix, lfo, lfoFreq;
       let sum = 0;
       let counter = 0;
-      window.audio.play = function () {
-        counter++;
-        sum = 0;
+      if (window.audio) {
+        window.audio.play = function () {
+          counter++;
+          sum = 0;
 
-        if (n > 0) {
-          for (let i = 0; i < n; i++) {
-            module = modules[i];
-            wave = module.wave;
-            freq = module.freq;
-            lfo = module.lfo;
-            lfoFreq = module.lfoFreq;
-            mix = module.mix;
+          if (n > 0) {
+            for (let i = 0; i < n; i++) {
+              module = modules[i];
+              wave = module.wave;
+              freq = module.freq;
+              lfo = module.lfo;
+              lfoFreq = module.lfoFreq;
+              mix = module.mix;
 
-            sum += (wave(freq) * lfo(lfoFreq)) * mix;
+              sum += (wave(freq) * lfo(lfoFreq)) * mix;
+            }
+            this.output = (sum / n * 2) * 0.6;
+            // this.output[0] = (sum / n * 2) * 0.5;
+            // this.output[1] = (sum / n * 2) * 0.5;
+            window.drawOutput[counter % 1024] = sum / n * 2;
           }
-          this.output = sum / n * 2;
-          window.drawOutput[counter % 1024] = sum / n * 2;
-        } else {
-          this.output = 0;
-          window.drawOutput[counter % 1024] = this.output;
-
         }
-
       }
-      // console.log('update')
     }
   }
 
@@ -71,6 +70,21 @@ class App extends Component {
   }
 
   addModule = () => {
+
+    window.drawOutput = [];
+
+    const audio = new maxim.maxiAudio();
+    // audio.outputIsArray(true, 2);
+    window.audio = audio;
+    audio.init();
+    audio.play = function () {
+      this.output = 0;
+      // this.output[0] = 0;
+      // this.output[1] = 0;
+    };
+
+
+
     this.setState({
       modulesNumber: this.state.modulesNumber + 1
     })
@@ -135,7 +149,7 @@ class App extends Component {
 
 const style = {
   app: {
-    
+
   },
   container: {
     margin: '0 auto',

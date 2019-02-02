@@ -17,7 +17,7 @@ class Visualizer extends Component {
         let spacing = width / 1024;
         function draw() {
             context.clearRect(0, 0, width, height);
-            if (window.drawOutput.length > 0) {
+            if (window.drawOutput) {
                 for (let i = 0; i < 1024; i++) {
                     context.beginPath();
                     context.moveTo(i * spacing, height / 2);
