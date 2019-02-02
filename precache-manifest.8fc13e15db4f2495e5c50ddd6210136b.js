@@ -4,15 +4,15 @@ self.__precacheManifest = [
     "url": "/maxisynth/static/js/runtime~main.08309a92.js"
   },
   {
-    "revision": "50f04738be5d2c4447a4",
-    "url": "/maxisynth/static/js/main.50f04738.chunk.js"
+    "revision": "dfa8e9d3101e88713769",
+    "url": "/maxisynth/static/js/main.dfa8e9d3.chunk.js"
   },
   {
     "revision": "846dfff3a7cf9dde0406",
     "url": "/maxisynth/static/js/1.846dfff3.chunk.js"
   },
   {
-    "revision": "50f04738be5d2c4447a4",
+    "revision": "dfa8e9d3101e88713769",
     "url": "/maxisynth/static/css/main.b753edaf.chunk.css"
   },
   {
@@ -20,7 +20,7 @@ self.__precacheManifest = [
     "url": "/maxisynth/static/css/1.948aa3a1.chunk.css"
   },
   {
-    "revision": "df1c3edc9cc9673bc7749d22f9d4e822",
+    "revision": "c8d48ae087557f3e29fcf1c3e1169593",
     "url": "/maxisynth/index.html"
   }
 ];

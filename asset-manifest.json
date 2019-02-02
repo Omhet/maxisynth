@@ -1,7 +1,7 @@
 {
   "main.css": "/maxisynth/static/css/main.b753edaf.chunk.css",
-  "main.js": "/maxisynth/static/js/main.50f04738.chunk.js",
-  "main.js.map": "/maxisynth/static/js/main.50f04738.chunk.js.map",
+  "main.js": "/maxisynth/static/js/main.dfa8e9d3.chunk.js",
+  "main.js.map": "/maxisynth/static/js/main.dfa8e9d3.chunk.js.map",
   "static/css/1.948aa3a1.chunk.css": "/maxisynth/static/css/1.948aa3a1.chunk.css",
   "static/js/1.846dfff3.chunk.js": "/maxisynth/static/js/1.846dfff3.chunk.js",
   "static/js/1.846dfff3.chunk.js.map": "/maxisynth/static/js/1.846dfff3.chunk.js.map",
@@ -10,6 +10,6 @@
   "static/css/1.948aa3a1.chunk.css.map": "/maxisynth/static/css/1.948aa3a1.chunk.css.map",
   "static/css/main.b753edaf.chunk.css.map": "/maxisynth/static/css/main.b753edaf.chunk.css.map",
   "index.html": "/maxisynth/index.html",
-  "precache-manifest.510b4bc8e3b58b6d2f9f62b302e47a92.js": "/maxisynth/precache-manifest.510b4bc8e3b58b6d2f9f62b302e47a92.js",
+  "precache-manifest.8fc13e15db4f2495e5c50ddd6210136b.js": "/maxisynth/precache-manifest.8fc13e15db4f2495e5c50ddd6210136b.js",
   "service-worker.js": "/maxisynth/service-worker.js"
 }
