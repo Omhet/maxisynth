@@ -5,35 +5,36 @@ import Module from './components/Module';
 class App extends Component {
   state = {
     modules: [],
+    waves: [],
     modulesNumber: 0
   }
 
   componentDidUpdate(prevProps, prevState) {
     const { modules, modulesNumber } = this.state;
     if (modules !== prevState.modules) {
-    const n = modulesNumber;
-    let module, wave, freq, mix;
-    // console.log(modules)
-    let sum = 0;
-    window.audio.play = function() {
-      if (n > 0) {
-        for (let i = 0; i < n; i++) {
-          module = modules[i];
-          wave = module.wave;
-          freq = module.freq;
-          mix = module.mix;
+      const n = modulesNumber;
+      let module, wave, freq, mix;
+      freq = Math.floor(Math.random() * 400) + 100
+      let sum = 0;
+      window.audio.play = function () {
+        sum = 0;
+        if (n > 0) {
+          for (let i = 0; i < n; i++) {
+            module = modules[i];
+            wave = module.wave;
+            freq = module.freq;
+            mix = module.mix;
 
-          sum += wave(freq) * mix;
+            sum += wave(freq) * mix;
+          }
+          this.output = sum / n * 2;
+        } else {
+          this.output = 0;
         }
-        this.output = sum / n * 2;
-      } else {
-        this.output = 0;
-      }
         // this.output = 0;
-
+      }
+      // console.log('update')
     }
-    // console.log('update')
-  }
   }
 
   render() {
@@ -43,14 +44,14 @@ class App extends Component {
     return (
       <div className={classes.app}>
         {
-          Array.apply(null, Array(modulesNumber)).map((m, i) => <Module 
-          key={i} 
-          index={i} 
-          onOscSet={this.handleOscSet}
-          onOscWaveSelect={this.handleOscWaveSelect}
-          onFreqChange={this.handleFreqChange}
-          onMixChange={this.handleMixChange}
-           />)
+          Array.apply(null, Array(modulesNumber)).map((m, i) => <Module
+            key={i}
+            index={i}
+            onOscSet={this.handleOscSet}
+            onWaveChange={this.handleWaveChange}
+            onFreqChange={this.handleFreqChange}
+            onMixChange={this.handleMixChange}
+          />)
         }
         <div className={classes.addButton} onClick={this.addModule}>Add module</div>
       </div>
@@ -58,27 +59,26 @@ class App extends Component {
   }
 
   addModule = () => {
-    console.log('addModule')
     this.setState({
       modulesNumber: this.state.modulesNumber + 1
     })
   }
 
   handleOscSet = (wave, freq, mix) => {
-    console.log('oscSet')
     const modules = [...this.state.modules];
-    modules.push({ wave, freq, mix})
+    modules.push({ wave, freq, mix })
     this.setState({
-      modules
+      modules,
+      waves: [...this.state.waves, wave]
     })
   }
 
-  handleOscWaveSelect = (wave, index) => {
-    const waves = [...this.state.waves];
-    waves[index] = wave;
+  handleWaveChange = (wave, index) => {
+    const modules = [...this.state.modules];
+    modules[index].wave = wave;
     this.setState({
-      waves
-    }, () => console.log(this.state.waves))
+      modules
+    })
   }
 
   handleFreqChange = (freq, index) => {
