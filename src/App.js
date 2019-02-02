@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import injectSheet from 'react-jss';
 import Module from './components/Module';
-import Analyzer from './components/Analyzer';
+import Visualizer from './components/Visualizer';
 
 class App extends Component {
   state = {
     modules: [],
-    modulesNumber: 0
+    modulesNumber: 1
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -50,7 +50,7 @@ class App extends Component {
 
     return (
       <div className={classes.app}>
-        <Analyzer />
+        <Visualizer />
         <div className={classes.container}>
           {
             Array.apply(null, Array(modulesNumber)).map((m, i) => <Module
