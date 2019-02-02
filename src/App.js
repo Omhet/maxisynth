@@ -49,6 +49,7 @@ class App extends Component {
           onOscSet={this.handleOscSet}
           onOscWaveSelect={this.handleOscWaveSelect}
           onFreqChange={this.handleFreqChange}
+          onMixChange={this.handleMixChange}
            />)
         }
         <div className={classes.addButton} onClick={this.addModule}>Add module</div>
@@ -83,6 +84,14 @@ class App extends Component {
   handleFreqChange = (freq, index) => {
     const modules = [...this.state.modules];
     modules[index].freq = Number(freq);
+    this.setState({
+      modules
+    })
+  }
+
+  handleMixChange = (mix, index) => {
+    const modules = [...this.state.modules];
+    modules[index].mix = Number(mix);
     this.setState({
       modules
     })

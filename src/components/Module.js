@@ -35,17 +35,21 @@ class Module extends Component {
                 <Knob 
                 initial={this.initialMix}
                 min={0}
-                max={1}
+                max={0.3}
                 step={0.01}
                 label="Mix"
                 color="#4ecca3"
-                onChange={this.handleFreqChange} />
+                onChange={this.handleMixChange} />
             </div>
         );
     }
 
     handleFreqChange = (value) => {
         this.props.onFreqChange(value, this.props.index)
+    }
+
+    handleMixChange = (value) => {
+        this.props.onMixChange(value, this.props.index)
     }
 
     handleOscWaveSelect = (event, value) => {
