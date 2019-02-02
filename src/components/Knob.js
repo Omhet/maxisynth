@@ -10,14 +10,14 @@ class Knob extends Component {
 
     componentDidMount() {
         let { knob } = this;
-        const { knobContainer, handleChange, props: { min, max, step, color, initial } } = this;
+        const { knobContainer, handleChange, props: { min, max, step, color, initial, dragResistance } } = this;
         knob = new FLStandardKnob(knobContainer.current, {
             min,
             max,
             step,
             color,
             initial,
-            dragResistance: 200
+            dragResistance
         });
         knob.addEventListener('change', function (e) {
             handleChange(e.target.value);
@@ -30,7 +30,7 @@ class Knob extends Component {
         return (
             <div className={classes.wrapper}>
                 <div ref={this.knobContainer}></div>
-                <div>{ label }</div>
+                <div>{label}</div>
             </div>
         );
     }
@@ -45,8 +45,9 @@ const style = {
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        userSelect: 'none'
     }
 }
 
-export default injectSheet(style)(Knob) ;
+export default injectSheet(style)(Knob);

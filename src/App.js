@@ -12,7 +12,7 @@ class App extends Component {
     const { modules, modulesNumber } = this.state;
     if (modules !== prevState.modules) {
       const n = modulesNumber;
-      let module, wave, freq, mix;
+      let module, wave, freq, mix, lfo, lfoFreq;
       let sum = 0;
       window.audio.play = function () {
         sum = 0;
@@ -21,9 +21,12 @@ class App extends Component {
             module = modules[i];
             wave = module.wave;
             freq = module.freq;
+            lfo = module.lfo;
+            lfoFreq = module.lfoFreq;
             mix = module.mix;
 
-            sum += wave(freq) * mix;
+            sum +=  (wave(freq) * lfo(lfoFreq)) * mix;
+            // sum +=  wave(freq) * mix;
           }
           this.output = sum / n * 2;
         } else {
@@ -31,7 +34,7 @@ class App extends Component {
         }
         // this.output = 0;
       }
-      console.log('update')
+      // console.log('update')
     }
   }
 
@@ -48,6 +51,8 @@ class App extends Component {
             onOscSet={this.handleOscSet}
             onWaveChange={this.handleWaveChange}
             onFreqChange={this.handleFreqChange}
+            onLFOFreqChange={this.handleLFOFreqChange}
+            onLFOWaveChange={this.handleLFOWaveChange}
             onMixChange={this.handleMixChange}
           />)
         }
@@ -62,9 +67,9 @@ class App extends Component {
     })
   }
 
-  handleOscSet = (wave, waveName, freq, mix) => {
+  handleOscSet = (wave, waveName, freq, mix, lfo, lfoName, lfoFreq) => {
     const modules = [...this.state.modules];
-    modules.push({ wave, waveName, freq, mix })
+    modules.push({ wave, waveName, freq, mix, lfo, lfoName, lfoFreq })
     this.setState({
       modules
     })
@@ -90,12 +95,32 @@ class App extends Component {
     })
   }
 
+  handleLFOFreqChange = (lfoFreq, index) => {
+    const modules = [...this.state.modules];
+    modules[index].lfoFreq = Number(lfoFreq);
+    this.setState({
+      modules
+    })
+  }
+
   handleMixChange = (mix, index) => {
     const modules = [...this.state.modules];
     modules[index].mix = Number(mix);
     this.setState({
       modules
     })
+  }
+
+  handleLFOWaveChange = (lfo, lfoName, index) => {
+    const modules = [...this.state.modules];
+    const module = modules[index];
+    if (module.lfoName !== lfoName) {
+      module.lfo = lfo;
+      module.lfoName = lfoName;
+      this.setState({
+        modules
+      })
+    }
   }
 }
 
