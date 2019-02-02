@@ -13,10 +13,11 @@ class Module extends Component {
     initialMix = 0.2
 
     componentDidMount() {
-        const wave = this.state.osc[this.waveNames[0]];
+        const waveName = this.waveNames[0];
+        const wave = this.state.osc[waveName];
         this.setState({
             wave
-        }, this.props.onOscSet(wave.bind(this.state.osc), this.initialFreq, this.initialMix))
+        }, this.props.onOscSet(wave.bind(this.state.osc), waveName, this.initialFreq, this.initialMix))
     }
 
     render() {
@@ -54,7 +55,7 @@ class Module extends Component {
     handleWaveChange = (value) => {
         const waveName = this.waveNames[value];
         const wave = this.state.osc[waveName];
-        this.props.onWaveChange(wave.bind(this.state.osc), this.props.index);
+        this.props.onWaveChange(wave.bind(this.state.osc), waveName, this.props.index);
     }
 
     handleFreqChange = (value) => {

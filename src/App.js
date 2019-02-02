@@ -5,7 +5,6 @@ import Module from './components/Module';
 class App extends Component {
   state = {
     modules: [],
-    waves: [],
     modulesNumber: 0
   }
 
@@ -14,7 +13,6 @@ class App extends Component {
     if (modules !== prevState.modules) {
       const n = modulesNumber;
       let module, wave, freq, mix;
-      freq = Math.floor(Math.random() * 400) + 100
       let sum = 0;
       window.audio.play = function () {
         sum = 0;
@@ -33,7 +31,7 @@ class App extends Component {
         }
         // this.output = 0;
       }
-      // console.log('update')
+      console.log('update')
     }
   }
 
@@ -64,21 +62,24 @@ class App extends Component {
     })
   }
 
-  handleOscSet = (wave, freq, mix) => {
+  handleOscSet = (wave, waveName, freq, mix) => {
     const modules = [...this.state.modules];
-    modules.push({ wave, freq, mix })
-    this.setState({
-      modules,
-      waves: [...this.state.waves, wave]
-    })
-  }
-
-  handleWaveChange = (wave, index) => {
-    const modules = [...this.state.modules];
-    modules[index].wave = wave;
+    modules.push({ wave, waveName, freq, mix })
     this.setState({
       modules
     })
+  }
+
+  handleWaveChange = (wave, waveName, index) => {
+    const modules = [...this.state.modules];
+    const module = modules[index];
+    if (module.waveName !== waveName) {
+      module.wave = wave;
+      module.waveName = waveName;
+      this.setState({
+        modules
+      })
+    }
   }
 
   handleFreqChange = (freq, index) => {
