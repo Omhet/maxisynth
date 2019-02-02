@@ -36,6 +36,7 @@ class Knob extends Component {
     }
 
     handleChange = (val) => {
+        console.log(val)
         this.props.onChange(val);
     }
 }

@@ -10,9 +10,9 @@ class Module extends Component {
         wave: null,
     }
     waveNames = ['sinewave', 'triangle', 'sawn', 'square']
-    initialFreq = 100
+    initialFreq = 171
     initialMix = 0.2
-    initialLFOFreq = 2
+    initialLFOFreq = 1
 
     componentDidMount() {
         const waveName = this.waveNames[0];
