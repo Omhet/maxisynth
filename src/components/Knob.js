@@ -24,7 +24,7 @@ class Knob extends Component {
                             <span className={classes.sw}><Saw style={{fill: Number(val) === 2 ? active : inactive}}/></span>
                             <span className={classes.sq}><Sq style={{fill: Number(val) === 3 ? active : inactive}}/></span>
                         </>
-                        : null}
+                        : <span className={classes.val}>{val}</span>}
                 </div>
                 <div className={classes.label}>{label}</div>
             </div>
@@ -62,11 +62,12 @@ const style = {
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
-        userSelect: 'none'
+        userSelect: 'none',
+        fontSize: '.8rem',
+        fontVariantNumeric: 'tabular-nums'
     },
     label: {
         marginTop: 4,
-        fontSize: '.8rem'
     },
     knob: {
         width: '4rem',
@@ -78,6 +79,13 @@ const style = {
                 fill: 'inherit',
             }
         }
+    },
+
+    val: {
+        color: '#4ecca3',
+        position: 'relative',
+        top: -12,
+        left: -8
     },
 
     sn: {
