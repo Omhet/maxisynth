@@ -8,7 +8,9 @@ class App extends Component {
   state = {
     modules: [],
     modulesNumber: 0
-  }
+  };
+
+  audio;
 
   componentDidUpdate(prevProps, prevState) {
     const { modules, modulesNumber } = this.state;
@@ -34,8 +36,6 @@ class App extends Component {
               sum += (wave(freq) * lfo(lfoFreq)) * mix;
             }
             this.output = (sum / n * 2) * 0.6;
-            // this.output[0] = (sum / n * 2) * 0.5;
-            // this.output[1] = (sum / n * 2) * 0.5;
             window.drawOutput[counter % 1024] = sum / n * 2;
           }
         }
@@ -74,13 +74,10 @@ class App extends Component {
     window.drawOutput = [];
 
     const audio = new maxim.maxiAudio();
-    // audio.outputIsArray(true, 2);
     window.audio = audio;
     audio.init();
     audio.play = function () {
       this.output = 0;
-      // this.output[0] = 0;
-      // this.output[1] = 0;
     };
 
 
@@ -88,7 +85,7 @@ class App extends Component {
     this.setState({
       modulesNumber: this.state.modulesNumber + 1
     })
-  }
+  };
 
   handleOscSet = (wave, waveName, freq, mix, lfo, lfoName, lfoFreq) => {
     const modules = [...this.state.modules];
@@ -96,7 +93,7 @@ class App extends Component {
     this.setState({
       modules
     })
-  }
+  };
 
   handleWaveChange = (wave, waveName, index) => {
     const modules = [...this.state.modules];
@@ -108,7 +105,7 @@ class App extends Component {
         modules
       })
     }
-  }
+  };
 
   handleFreqChange = (freq, index) => {
     const modules = [...this.state.modules];
@@ -116,7 +113,7 @@ class App extends Component {
     this.setState({
       modules
     })
-  }
+  };
 
   handleLFOFreqChange = (lfoFreq, index) => {
     const modules = [...this.state.modules];
@@ -124,7 +121,7 @@ class App extends Component {
     this.setState({
       modules
     })
-  }
+  };
 
   handleMixChange = (mix, index) => {
     const modules = [...this.state.modules];
@@ -132,7 +129,7 @@ class App extends Component {
     this.setState({
       modules
     })
-  }
+  };
 
   handleLFOWaveChange = (lfo, lfoName, index) => {
     const modules = [...this.state.modules];
@@ -171,6 +168,6 @@ const style = {
       boxShadow: '0 1px 3px rgba(78, 204, 163, 0.46)'
     }
   }
-}
+};
 
 export default injectSheet(style)(App);
