@@ -71,16 +71,15 @@ class App extends Component {
 
   addModule = () => {
 
-    window.drawOutput = [];
-
-    const audio = new maxim.maxiAudio();
-    window.audio = audio;
-    audio.init();
-    audio.play = function () {
-      this.output = 0;
-    };
-
-
+    if (!window.audio) {
+      window.drawOutput = [];
+      const audio = new maxim.maxiAudio();
+      window.audio = audio;
+      audio.init();
+      audio.play = function () {
+        this.output = 0;
+      };
+    }
 
     this.setState({
       modulesNumber: this.state.modulesNumber + 1
