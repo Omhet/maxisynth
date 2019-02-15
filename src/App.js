@@ -70,20 +70,24 @@ class App extends Component {
     }
 
     addModule = () => {
-
-        if (!this.audio) {
-            window.drawOutput = [];
-            const audio = new maxim.maxiAudio();
-            this.audio = audio;
-            this.audio.init();
-            this.audio.play = function () {
-                this.output = 0;
-            };
+        if (this.state.modulesNumber === 0) {
+            this.setUpAudio();
         }
 
         this.setState({
             modulesNumber: this.state.modulesNumber + 1
         })
+    };
+
+    setUpAudio = () => {
+        if (!this.audio) {
+            window.drawOutput = [];
+            this.audio = new maxim.maxiAudio();
+            this.audio.init();
+            this.audio.play = function () {
+                this.output = 0;
+            };
+        }
     };
 
     handleOscSet = (wave, waveName, freq, mix, lfo, lfoName, lfoFreq) => {
