@@ -2,44 +2,88 @@ import React, {Component} from 'react';
 import injectSheet from 'react-jss';
 import Module from './components/Module';
 import Visualizer from './components/Visualizer';
-import {maxim} from './helpers';
+import {keysToNotesMap, maxim} from './helpers';
 
 class App extends Component {
     state = {
         modules: [],
-        modulesNumber: 0
+        modulesNumber: 0,
+        mode: 'play',
+        note: 0
     };
 
+    componentDidMount() {
+        window.addEventListener('keydown', this.handleKeyDown);
+        window.addEventListener('keyup', this.handleKeyUp);
+    }
+
+
     componentDidUpdate(prevProps, prevState) {
-        const {modules, modulesNumber} = this.state;
+        const {modules, modulesNumber, mode } = this.state;
         if (modules !== prevState.modules) {
             const n = modulesNumber;
-            let module, wave, freq, mix, lfo, lfoFreq;
+            let module, wave, freq, mix, lfo, lfoFreq, play;
             let sum = 0;
             let counter = 0;
             if (this.audio) {
-                this.audio.play = function () {
-                    counter++;
-                    sum = 0;
+                if (mode === 'tweak') {
+                    this.audio.play = function () {
+                        counter++;
+                        sum = 0;
 
-                    if (n > 0) {
-                        for (let i = 0; i < n; i++) {
-                            module = modules[i];
-                            wave = module.wave;
-                            freq = module.freq;
-                            lfo = module.lfo;
-                            lfoFreq = module.lfoFreq;
-                            mix = module.mix;
+                        if (n > 0) {
+                            for (let i = 0; i < n; i++) {
+                                module = modules[i];
+                                wave = module.wave;
+                                freq = module.freq;
+                                lfo = module.lfo;
+                                lfoFreq = module.lfoFreq;
+                                mix = module.mix;
 
-                            sum += (wave(freq) * lfo(lfoFreq)) * mix;
+                                sum += (wave(freq) * lfo(lfoFreq)) * mix;
+                            }
+                            this.output = (sum / n * 2) * 0.6;
+                            window.drawOutput[counter % 1024] = sum / n * 2;
                         }
-                        this.output = (sum / n * 2) * 0.6;
-                        window.drawOutput[counter % 1024] = sum / n * 2;
+                    }
+                } else if (mode === 'play') {
+                    this.audio.play = function () {
+                        counter++;
+                        sum = 0;
+
+                        if (n > 0) {
+                            for (let i = 0; i < n; i++) {
+                                module = modules[i];
+                                wave = module.wave;
+                                freq = module.freq;
+                                lfo = module.lfo;
+                                lfoFreq = module.lfoFreq;
+                                mix = module.mix;
+                                play = module.play;
+
+                                sum += (wave(freq) * (lfo(lfoFreq) * play)) * mix;
+                            }
+                            this.output = (sum / n * 2) * 0.6;
+                            window.drawOutput[counter % 1024] = sum / n * 2;
+                        }
                     }
                 }
             }
         }
     }
+
+    handleKeyDown = (e) => {
+        const key = e.keyCode;
+        const note = keysToNotesMap[key];
+        if (note && this.state.note !== note) {
+            this.handleNoteChange(note, 1, 0);
+        }
+    };
+
+    handleKeyUp = (e) => {
+        // const key = e.keyCode;
+        this.handleNoteChange(0, 0, 0);
+    };
 
     render() {
         const {classes} = this.props;
@@ -113,6 +157,15 @@ class App extends Component {
     handleFreqChange = (freq, index) => {
         const modules = [...this.state.modules];
         modules[index].freq = Number(freq);
+        this.setState({
+            modules
+        })
+    };
+
+    handleNoteChange = (freq, play, index) => {
+        const modules = [...this.state.modules];
+        modules[index].freq = Number(freq);
+        modules[index].play = play;
         this.setState({
             modules
         })
