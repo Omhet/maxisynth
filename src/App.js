@@ -3,14 +3,49 @@ import injectSheet from 'react-jss';
 import Module from './components/Module';
 import Visualizer from './components/Visualizer';
 import {keysToNotesMap, maxim} from './helpers';
+import Tabs from "./components/Tabs";
 
 class App extends Component {
     state = {
         modules: [],
         modulesNumber: 0,
-        mode: 'play',
-        note: 0
+        mode: 'tweak'
     };
+
+    modes = ['tweak', 'play'];
+
+    notesModulesMap = {};
+
+    render() {
+        const {classes} = this.props;
+        const {modulesNumber} = this.state;
+
+        const buttonText = modulesNumber > 0 ? 'Add module' : 'Start tweaking';
+
+        return (
+            <div className={classes.app}>
+                <Visualizer/>
+                {modulesNumber > 0 ?
+                    <Tabs value={this.state.mode} onChange={this.handleModeChange} tabs={this.modes} />
+                    : null}
+                <div className={classes.container}>
+                    {
+                        Array.apply(null, Array(modulesNumber)).map((m, i) => <Module
+                            key={i}
+                            index={i}
+                            onOscSet={this.handleOscSet}
+                            onWaveChange={this.handleWaveChange}
+                            onFreqChange={this.handleFreqChange}
+                            onLFOFreqChange={this.handleLFOFreqChange}
+                            onLFOWaveChange={this.handleLFOWaveChange}
+                            onMixChange={this.handleMixChange}
+                        />)
+                    }
+                    <div className={classes.addButton} onClick={this.addModule}>{buttonText}</div>
+                </div>
+            </div>
+        );
+    }
 
     componentDidMount() {
         window.addEventListener('keydown', this.handleKeyDown);
@@ -73,45 +108,53 @@ class App extends Component {
     }
 
     handleKeyDown = (e) => {
-        const key = e.keyCode;
-        const note = keysToNotesMap[key];
-        if (note && this.state.note !== note) {
-            this.handleNoteChange(note, 1, 0);
+        const { modules, modulesNumber } = this.state;
+        const notesModulesMap = this.notesModulesMap;
+
+        if (modulesNumber > 0) {
+            const key = e.keyCode;
+            const note = keysToNotesMap[key];
+            if (note && notesModulesMap[note] === undefined) {
+
+                // console.log(note)
+
+                for (let i in modules) {
+                    if (modules[i].play === 0 || modules[i].play === undefined) {
+                        notesModulesMap[note] = i;
+                        this.handleNoteChange(note, 1, i);
+                        return;
+                    }
+                }
+            }
         }
     };
 
     handleKeyUp = (e) => {
-        // const key = e.keyCode;
-        this.handleNoteChange(0, 0, 0);
+        const { modulesNumber } = this.state;
+        const notesModulesMap = this.notesModulesMap;
+
+        if (modulesNumber > 0) {
+            const key = e.keyCode;
+            const note = keysToNotesMap[key];
+
+            if (note && notesModulesMap[note] !== undefined) {
+                const i = notesModulesMap[note];
+                this.handleNoteChange(0, 0, i);
+                notesModulesMap[note] = undefined;
+            }
+        }
     };
 
-    render() {
-        const {classes} = this.props;
-        const {modulesNumber} = this.state;
-
-        const buttonText = modulesNumber > 0 ? 'Add module' : 'Start tweaking';
-
-        return (
-            <div className={classes.app}>
-                <Visualizer/>
-                <div className={classes.container}>
-                    {
-                        Array.apply(null, Array(modulesNumber)).map((m, i) => <Module
-                            key={i}
-                            index={i}
-                            onOscSet={this.handleOscSet}
-                            onWaveChange={this.handleWaveChange}
-                            onFreqChange={this.handleFreqChange}
-                            onLFOFreqChange={this.handleLFOFreqChange}
-                            onLFOWaveChange={this.handleLFOWaveChange}
-                            onMixChange={this.handleMixChange}
-                        />)
-                    }
-                    <div className={classes.addButton} onClick={this.addModule}>{buttonText}</div>
-                </div>
-            </div>
-        );
-    }
+    handleModeChange = mode => {
+        if (mode !== this.state.mode) {
+            if (mode === 'tweak') {
+                this.state.modules.forEach((m, i) => this.handleNoteChange(171, 1, i));
+            } else if (mode === 'play') {
+                this.state.modules.forEach((m, i) => this.handleNoteChange(0, 0, i));
+            }
+            this.setState({ mode });
+        }
+    };
 
     addModule = () => {
         if (this.state.modulesNumber === 0) {
@@ -208,6 +251,7 @@ const style = {
         display: 'flex',
         flexDirection: 'column'
     },
+
     addButton: {
         cursor: 'pointer',
         color: '#eeeeee',
