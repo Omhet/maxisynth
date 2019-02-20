@@ -96,7 +96,7 @@ class App extends Component {
                                 mix = module.mix;
                                 play = module.play;
 
-                                sum += (wave(freq) * (lfo(lfoFreq) * play)) * mix;
+                                sum += (wave(freq) * lfo(lfoFreq)) * mix * play;
                             }
                             this.output = (sum / n * 2) * 0.6;
                             window.drawOutput[counter % 1024] = sum / n * 2;
@@ -116,7 +116,6 @@ class App extends Component {
             const note = keysToNotesMap[key];
             if (note && notesModulesMap[note] === undefined) {
 
-                // console.log(note)
 
                 for (let i in modules) {
                     if (modules[i].play === 0 || modules[i].play === undefined) {
@@ -156,6 +155,15 @@ class App extends Component {
         }
     };
 
+    handleNoteChange = (freq, play, index) => {
+        const modules = [...this.state.modules];
+        modules[index].freq = Number(freq);
+        modules[index].play = Number(play);
+        this.setState({
+            modules
+        })
+    };
+
     addModule = () => {
         if (this.state.modulesNumber === 0) {
             this.setUpAudio();
@@ -179,7 +187,7 @@ class App extends Component {
 
     handleOscSet = (wave, waveName, freq, mix, lfo, lfoName, lfoFreq) => {
         const modules = [...this.state.modules];
-        modules.push({wave, waveName, freq, mix, lfo, lfoName, lfoFreq})
+        modules.push({wave, waveName, freq, mix, lfo, lfoName, lfoFreq, play: 0})
         this.setState({
             modules
         })
@@ -200,15 +208,6 @@ class App extends Component {
     handleFreqChange = (freq, index) => {
         const modules = [...this.state.modules];
         modules[index].freq = Number(freq);
-        this.setState({
-            modules
-        })
-    };
-
-    handleNoteChange = (freq, play, index) => {
-        const modules = [...this.state.modules];
-        modules[index].freq = Number(freq);
-        modules[index].play = play;
         this.setState({
             modules
         })
